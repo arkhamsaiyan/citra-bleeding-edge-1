@@ -421,7 +421,7 @@ private:
         UniformData data;
         bool lut_dirty[6];
         bool dirty;
-    } uniform_block_data;
+    } uniform_block_data = {};
 
     OGLVertexArray vertex_array;
     OGLBuffer vertex_buffer;
