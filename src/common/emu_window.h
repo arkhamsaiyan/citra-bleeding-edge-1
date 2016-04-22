@@ -55,6 +55,8 @@ public:
         MathUtil::Rectangle<unsigned> bottom_screen;
     };
 
+    enum StereoscopicMode { LeftOnly, RightOnly, Anaglyph };
+
     /// Swap buffers to display the next frame
     virtual void SwapBuffers() = 0;
 
@@ -107,6 +109,14 @@ public:
      * @param framebuffer_y Framebuffer y-coordinate
      */
     void TouchMoved(unsigned framebuffer_x, unsigned framebuffer_y);
+
+    /**
+     * Signal that a 3d depth slider change has occurred
+     * @param value new value for 3d depth slider;
+     */
+    void DepthSliderChanged(float value);
+
+    void StereoscopicModeChanged(StereoscopicMode mode);
 
     /**
      * Gets the current pad state (which buttons are pressed).
@@ -189,6 +199,22 @@ public:
     }
 
     /**
+     * Gets the value of the 3D depth slider.
+     * @return float-type value
+     */
+    f32 GetDepthSliderValue() const {
+        return depth_slider;
+    }
+
+    /**
+     * Gets the stereoscopic mode.
+     * @return StereoscopicMode value
+     */
+    StereoscopicMode GetStereoscopicMode() const {
+        return stereoscopic_mode;
+    }
+
+    /**
      * Returns currently active configuration.
      * @note Accesses to the returned object need not be consistent because it may be modified in
      * another thread
@@ -226,6 +252,8 @@ protected:
         circle_pad_x = 0;
         circle_pad_y = 0;
         touch_pressed = false;
+        depth_slider = 0.0f;
+        stereoscopic_mode = Anaglyph;
     }
     virtual ~EmuWindow() {}
 
@@ -290,6 +318,10 @@ private:
 
     s16 circle_pad_x; ///< Circle pad X-position in native 3DS pixel coordinates (-156 - 156)
     s16 circle_pad_y; ///< Circle pad Y-position in native 3DS pixel coordinates (-156 - 156)
+
+    f32 depth_slider; ///< 3D depth slider (0.0-1.0)
+
+    StereoscopicMode stereoscopic_mode; ///< stereoscopic mode
 
     /**
      * Clip the provided coordinates to be inside the touchscreen area.

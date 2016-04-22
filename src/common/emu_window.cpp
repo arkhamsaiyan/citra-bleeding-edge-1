@@ -89,6 +89,14 @@ void EmuWindow::TouchMoved(unsigned framebuffer_x, unsigned framebuffer_y) {
     TouchPressed(framebuffer_x, framebuffer_y);
 }
 
+void EmuWindow::DepthSliderChanged(float value) {
+    depth_slider = value;
+}
+
+void EmuWindow::StereoscopicModeChanged(StereoscopicMode mode) {
+    stereoscopic_mode = mode;
+}
+
 EmuWindow::FramebufferLayout EmuWindow::FramebufferLayout::DefaultScreenLayout(unsigned width,
                                                                                unsigned height) {
     // When hiding the widget, the function receives a size of 0
