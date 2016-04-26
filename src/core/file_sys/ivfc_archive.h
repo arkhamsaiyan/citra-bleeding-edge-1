@@ -10,6 +10,7 @@
 #include <vector>
 #include "common/common_types.h"
 #include "common/file_util.h"
+#include "core/aes/aes.h"
 #include "core/file_sys/archive_backend.h"
 #include "core/file_sys/directory_backend.h"
 #include "core/file_sys/file_backend.h"
@@ -27,8 +28,9 @@ namespace FileSys {
  */
 class IVFCArchive : public ArchiveBackend {
 public:
-    IVFCArchive(std::shared_ptr<FileUtil::IOFile> file, u64 offset, u64 size)
-        : romfs_file(file), data_offset(offset), data_size(size) {}
+    IVFCArchive(std::shared_ptr<FileUtil::IOFile> file, u64 offset, u64 size,
+                const AES::AesContext& ac = AES::AesContext())
+        : romfs_file(file), data_offset(offset), data_size(size), aes_context(ac) {}
 
     std::string GetName() const override;
 
@@ -47,12 +49,14 @@ protected:
     std::shared_ptr<FileUtil::IOFile> romfs_file;
     u64 data_offset;
     u64 data_size;
+    AES::AesContext aes_context;
 };
 
 class IVFCFile : public FileBackend {
 public:
-    IVFCFile(std::shared_ptr<FileUtil::IOFile> file, u64 offset, u64 size)
-        : romfs_file(file), data_offset(offset), data_size(size) {}
+    IVFCFile(std::shared_ptr<FileUtil::IOFile> file, u64 offset, u64 size,
+             const AES::AesContext& ac)
+        : romfs_file(file), data_offset(offset), data_size(size), aes_context(ac) {}
 
     ResultCode Open() override {
         return RESULT_SUCCESS;
@@ -67,9 +71,14 @@ public:
     void Flush() const override {}
 
 private:
+    u8 ReadEncryptedByte(u64 offset) const;
     std::shared_ptr<FileUtil::IOFile> romfs_file;
     u64 data_offset;
     u64 data_size;
+    AES::AesContext aes_context;
+    mutable std::array<u8, 16> decrypt_buf;
+    mutable u64 buf_index;
+    mutable bool decrypt_buffered = false;
 };
 
 class IVFCDirectory : public DirectoryBackend {
