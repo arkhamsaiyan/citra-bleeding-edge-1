@@ -58,7 +58,7 @@ static void OpenFile(
         u32 filename_size,
         u32 mode_hex,
         u32 attributes,  // TODO(Link Mauve): do something with those attributes.
-        IPC::StaticBufferParam filename
+        const IPC::StaticBufferParam& filename
     ) {
     FileSys::Mode mode; mode.hex = mode_hex;
     FileSys::Path file_path(filename_type, filename_size, filename.data.data());
@@ -101,8 +101,8 @@ static void OpenFileDirectly(
         u32 filename_size,
         u32 mode_hex,
         u32 attributes,
-        IPC::StaticBufferParam archivename,
-        IPC::StaticBufferParam filename
+        const IPC::StaticBufferParam& archivename,
+        const IPC::StaticBufferParam& filename
     ) {
     FileSys::Mode mode; mode.hex = mode_hex;
     FileSys::Path archive_path(archivename_type, archivename_size, archivename.data.data());

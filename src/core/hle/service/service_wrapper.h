@@ -33,7 +33,7 @@ template <typename T>
 unsigned ReadRegularParam(VAddr cmd_buff, T& dest) {
     static_assert(std::is_pod<T>::value, "Reqular param must be POD!");
     unsigned word_length = (sizeof(T) - 1) / 4 + 1;
-    std::memcpy(&dest, Memory::GetPointer(cmd_buff), word_length * 4); //ReadBlock
+    std::memcpy(&dest, Memory::GetPointer(cmd_buff), sizeof(T)); //ReadBlock
     return word_length;
 }
 
@@ -157,7 +157,7 @@ template <typename T>
 unsigned WriteRegularParam(VAddr cmd_buff, const T& src) {
     static_assert(std::is_pod<typename std::remove_reference<T>::type>::value, "Regular param must be POD!");
     unsigned word_length = (sizeof(T) - 1) / 4 + 1;
-    std::memcpy(Memory::GetPointer(cmd_buff), &src, word_length * 4); // WriteBlock
+    std::memcpy(Memory::GetPointer(cmd_buff), &src, sizeof(T)); // WriteBlock
     return word_length;
 }
 
