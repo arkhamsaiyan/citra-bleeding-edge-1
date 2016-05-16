@@ -801,9 +801,9 @@ static void GetFormatInfo(Service::Interface* self) {
 const Interface::FunctionInfo FunctionTable[] = {
     {0x000100C6, nullptr,                  "Dummy1"},
     {0x040100C4, nullptr,                  "Control"},
-    {0x08010002, IPC::Wrap<decltype(Initialize),Initialize>::F,               "Initialize"},
-    {0x080201C2, IPC::Wrap<decltype(OpenFile),OpenFile>::F,                 "OpenFile"},
-    {0x08030204, IPC::Wrap<decltype(OpenFileDirectly),OpenFileDirectly>::F,         "OpenFileDirectly"},
+    {0x08010002, IPC::Wrap<decltype(Initialize)>::F<Initialize>,               "Initialize"},
+    {0x080201C2, IPC::Wrap<decltype(OpenFile)>::F<OpenFile>,                 "OpenFile"},
+    {0x08030204, IPC::Wrap<decltype(OpenFileDirectly)>::F<OpenFileDirectly>,         "OpenFileDirectly"},
     {0x08040142, DeleteFile,               "DeleteFile"},
     {0x08050244, RenameFile,               "RenameFile"},
     {0x08060142, DeleteDirectory,          "DeleteDirectory"},

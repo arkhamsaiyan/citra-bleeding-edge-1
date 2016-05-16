@@ -44,11 +44,11 @@ static void GetServiceHandle(const char(& name)[8], u32 name_length, u32 flags) 
 }
 
 const Interface::FunctionInfo FunctionTable[] = {
-    {0x00010002, IPC::Wrap<decltype(Initialize), Initialize>::F,             "Initialize"},
-    {0x00020000, IPC::Wrap<decltype(GetProcSemaphore), GetProcSemaphore>::F, "GetProcSemaphore"},
+    {0x00010002, IPC::Wrap<decltype(Initialize)>::F<Initialize>,             "Initialize"},
+    {0x00020000, IPC::Wrap<decltype(GetProcSemaphore)>::F<GetProcSemaphore>, "GetProcSemaphore"},
     {0x00030100, nullptr,             "RegisterService"},
     {0x000400C0, nullptr,             "UnregisterService"},
-    {0x00050100, IPC::Wrap<decltype(GetServiceHandle), GetServiceHandle>::F, "GetServiceHandle"},
+    {0x00050100, IPC::Wrap<decltype(GetServiceHandle)>::F<GetServiceHandle>, "GetServiceHandle"},
     {0x000600C2, nullptr,             "RegisterHandle"},
     {0x00090040, nullptr,             "Subscribe"},
     {0x000B0000, nullptr,             "ReceiveNotification"},
