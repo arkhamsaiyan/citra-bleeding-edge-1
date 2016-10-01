@@ -55,7 +55,7 @@ public:
         MathUtil::Rectangle<unsigned> bottom_screen;
     };
 
-    enum StereoscopicMode { LeftOnly, RightOnly, Anaglyph };
+    enum StereoscopicMode { LeftOnly, RightOnly, Anaglyph, SideBySide };
 
     /// Swap buffers to display the next frame
     virtual void SwapBuffers() = 0;

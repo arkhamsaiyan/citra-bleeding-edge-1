@@ -251,8 +251,6 @@ void RendererOpenGL::LoadColorToActiveGLTexture(u8 color_r, u8 color_g, u8 color
  * Initializes the OpenGL state and creates persistent objects.
  */
 void RendererOpenGL::InitOpenGLObjects() {
-    glClearColor(Settings::values.bg_red, Settings::values.bg_green, Settings::values.bg_blue,
-                 0.0f);
 
     // Link shaders and get variable locations
     shader.Create(vertex_shader, fragment_shader);
@@ -403,6 +401,8 @@ void RendererOpenGL::DrawScreens() {
     auto layout = render_window->GetFramebufferLayout();
 
     glViewport(0, 0, layout.width, layout.height);
+    glClearColor(Settings::values.bg_red, Settings::values.bg_green, Settings::values.bg_blue,
+                 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Set projection matrix
@@ -433,10 +433,59 @@ void RendererOpenGL::DrawScreens() {
                                 (float)layout.top_screen.top, (float)layout.top_screen.GetWidth(),
                                 (float)layout.top_screen.GetHeight(), false, true);
         break;
+    case EmuWindow::StereoscopicMode::SideBySide:
+        float l = (float)layout.top_screen.left/2.0f;
+        float w = (float)layout.top_screen.GetWidth()/2.0f;
+        DrawSingleScreenRotated(screen_infos[0], l,
+                                (float)layout.top_screen.top, w,
+                                (float)layout.top_screen.GetHeight(), true, true);
+        DrawSingleScreenRotated(screen_infos[1], (float)layout.width/2.0f+l,
+                                (float)layout.top_screen.top, w,
+                                (float)layout.top_screen.GetHeight(), true, true);
+        break;
     }
-    DrawSingleScreenRotated(screen_infos[2], (float)layout.bottom_screen.left,
-                            (float)layout.bottom_screen.top, (float)layout.bottom_screen.GetWidth(),
-                            (float)layout.bottom_screen.GetHeight(), true, true);
+    // Draw bottom screen
+    switch (render_window->GetStereoscopicMode()) {
+    case EmuWindow::StereoscopicMode::LeftOnly:
+    case EmuWindow::StereoscopicMode::RightOnly:
+    case EmuWindow::StereoscopicMode::Anaglyph:
+      DrawSingleScreenRotated(screen_infos[2], (float)layout.bottom_screen.left,
+                              (float)layout.bottom_screen.top, (float)layout.bottom_screen.GetWidth(),
+                              (float)layout.bottom_screen.GetHeight(), true, true);
+        break;
+    case EmuWindow::StereoscopicMode::SideBySide:
+        // For side by side we duplicate the image so it appears 2D on a 3D display
+        float l = (float)layout.bottom_screen.left/2.0f;
+        float w = (float)layout.bottom_screen.GetWidth()/2.0f;
+        DrawSingleScreenRotated(screen_infos[2], l,
+                                (float)layout.bottom_screen.top, w,
+                                (float)layout.bottom_screen.GetHeight(), true, true);
+        DrawSingleScreenRotated(screen_infos[2], (float)layout.width/2.0f+l,
+                                (float)layout.bottom_screen.top, w,
+                                (float)layout.bottom_screen.GetHeight(), true, true);
+        // Draw some cursor for touch
+        auto touch = render_window->GetTouchState();
+        auto x = (float)std::get<0>(touch) / (float)VideoCore::kScreenBottomWidth * w + l;
+        auto y = layout.bottom_screen.top -
+                 (float)std::get<1>(touch) / (float)VideoCore::kScreenBottomHeight *
+                 (float)layout.bottom_screen.GetHeight();
+        glEnable(GL_SCISSOR_TEST);
+        for(unsigned int i = 0; i < 2; i++) {
+          glScissor(x-1, y-2, 3, 5);
+          glClearColor(0.0f,0.0f,0.0f,1.0f);
+          glClear(GL_COLOR_BUFFER_BIT);
+          glScissor(x, y-1, 1, 3);
+          if (std::get<2>(touch)) {
+            glClearColor(1.0f,0.0f,0.0f,1.0f);
+          } else {
+            glClearColor(1.0f,1.0f,1.0f,1.0f);
+          }
+          glClear(GL_COLOR_BUFFER_BIT);
+          x += (float)layout.width/2.0f;
+        }
+        glDisable(GL_SCISSOR_TEST);
+        break;
+    }
 
     m_current_frame++;
 }
