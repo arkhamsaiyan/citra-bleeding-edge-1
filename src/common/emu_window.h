@@ -95,10 +95,8 @@ public:
 
     /**
      * Signal that a touch pressed event has occurred (e.g. mouse click pressed)
-     * @param framebuffer_x Framebuffer x-coordinate that was pressed
-     * @param framebuffer_y Framebuffer y-coordinate that was pressed
      */
-    void TouchPressed(unsigned framebuffer_x, unsigned framebuffer_y);
+    void TouchPressed();
 
     /// Signal that a touch released event has occurred (e.g. mouse click released)
     void TouchReleased();
