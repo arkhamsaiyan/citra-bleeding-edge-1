@@ -14,8 +14,8 @@
 #include "core/hle/service/hid/hid.h"
 #include "core/settings.h"
 
-#include "input_core/input_core.h"
 #include "input_core/devices/keyboard.h"
+#include "input_core/input_core.h"
 
 #include "citra/emu_window/emu_window_sdl2.h"
 
@@ -169,6 +169,7 @@ void EmuWindow_SDL2::DoneCurrent() {
     SDL_GL_MakeCurrent(render_window, nullptr);
 }
 
-void EmuWindow_SDL2::OnMinimalClientAreaChangeRequest(const std::pair<unsigned, unsigned>& minimal_size) {
+void EmuWindow_SDL2::OnMinimalClientAreaChangeRequest(
+    const std::pair<unsigned, unsigned>& minimal_size) {
     SDL_SetWindowMinimumSize(render_window, minimal_size.first, minimal_size.second);
 }
