@@ -11,8 +11,8 @@
 #include "core/hle/kernel/memory.h"
 #include "core/hw/hw.h"
 #include "core/system.h"
-#include "video_core/video_core.h"
 #include "input_core/input_core.h"
+#include "video_core/video_core.h"
 
 namespace System {
 

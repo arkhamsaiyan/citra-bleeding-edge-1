@@ -5,10 +5,10 @@
 #include <cmath>
 #include "common/emu_window.h"
 
-#include "core/hle/service/service.h"
 #include "core/hle/service/hid/hid.h"
 #include "core/hle/service/hid/hid_spvr.h"
 #include "core/hle/service/hid/hid_user.h"
+#include "core/hle/service/service.h"
 
 #include "input_core/input_core.h"
 

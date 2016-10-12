@@ -222,8 +222,8 @@ private:
     WindowConfig active_config; ///< Internal active configuration
 
     bool touch_pressed; ///< True if touchpad area is currently pressed, otherwise false
-   /**
-    * Clip the provided coordinates to be inside the touchscreen area.
-    */
-    std::tuple<unsigned,unsigned> ClipToTouchScreen(unsigned new_x, unsigned new_y);
+                        /**
+                         * Clip the provided coordinates to be inside the touchscreen area.
+                         */
+    std::tuple<unsigned, unsigned> ClipToTouchScreen(unsigned new_x, unsigned new_y);
 };

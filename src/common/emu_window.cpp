@@ -38,10 +38,12 @@ void EmuWindow::TouchPressed(unsigned framebuffer_x, unsigned framebuffer_y) {
     if (!IsWithinTouchscreen(framebuffer_layout, framebuffer_x, framebuffer_y))
         return;
 
-    int touch_x = VideoCore::kScreenBottomWidth * (framebuffer_x - framebuffer_layout.bottom_screen.left) /
-        (framebuffer_layout.bottom_screen.right - framebuffer_layout.bottom_screen.left);
-    int touch_y = VideoCore::kScreenBottomHeight * (framebuffer_y - framebuffer_layout.bottom_screen.top) /
-        (framebuffer_layout.bottom_screen.bottom - framebuffer_layout.bottom_screen.top);
+    int touch_x = VideoCore::kScreenBottomWidth *
+                  (framebuffer_x - framebuffer_layout.bottom_screen.left) /
+                  (framebuffer_layout.bottom_screen.right - framebuffer_layout.bottom_screen.left);
+    int touch_y = VideoCore::kScreenBottomHeight *
+                  (framebuffer_y - framebuffer_layout.bottom_screen.top) /
+                  (framebuffer_layout.bottom_screen.bottom - framebuffer_layout.bottom_screen.top);
     touch_pressed = true;
     InputCore::SetTouchState(std::make_tuple(touch_x, touch_y, true));
     auto pad_state = InputCore::GetPadState();
