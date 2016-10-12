@@ -46,6 +46,6 @@ private:
     std::map<int, bool> keys_pressed_last;
     std::mutex m; ///< Keys pressed from frontend is on a separate thread.
     std::map<int, float> circle_pad_directions; ///< Inverts the strength of key press if it is a
-                                                ///circle pad direction that needs it.
+                                                /// circle pad direction that needs it.
     KeyboardKey circle_pad_modifier;
 };

@@ -6,7 +6,6 @@
 #include <memory>
 #include <QKeyEvent>
 #include <QWidget>
-#include <QWidget>
 #include "citra_qt/config.h"
 #include "core/settings.h"
 #include "input_core/devices/device.h"
