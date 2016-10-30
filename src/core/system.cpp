@@ -11,6 +11,7 @@
 #include "core/hle/kernel/memory.h"
 #include "core/hw/hw.h"
 #include "core/system.h"
+#include "input_core/input_core.h"
 #include "video_core/video_core.h"
 
 namespace System {
@@ -28,6 +29,7 @@ Result Init(EmuWindow* emu_window) {
         return Result::ErrorInitVideoCore;
     }
     AudioCore::Init();
+    InputCore::Init();
     GDBStub::Init();
 
     is_powered_on = true;
@@ -41,6 +43,7 @@ bool IsPoweredOn() {
 
 void Shutdown() {
     GDBStub::Shutdown();
+    InputCore::Shutdown();
     AudioCore::Shutdown();
     VideoCore::Shutdown();
     HLE::Shutdown();

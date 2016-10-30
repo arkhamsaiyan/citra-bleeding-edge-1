@@ -4,7 +4,7 @@
 
 #include "audio_core/audio_core.h"
 #include "core/gdbstub/gdbstub.h"
-#include "settings.h"
+#include "input_core/input_core.h"
 #include "video_core/video_core.h"
 
 namespace Settings {
@@ -22,6 +22,8 @@ void Apply() {
 
     AudioCore::SelectSink(values.sink_id);
     AudioCore::EnableStretching(values.enable_audio_stretching);
+
+    InputCore::ReloadSettings();
 }
 
 } // namespace
