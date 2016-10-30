@@ -3,6 +3,8 @@
 // Refer to the license.txt file included.
 
 #include "audio_core/audio_core.h"
+
+#include "core/cheat_core.h"
 #include "core/core.h"
 #include "core/core_timing.h"
 #include "core/gdbstub/gdbstub.h"
@@ -29,6 +31,7 @@ Result Init(EmuWindow* emu_window) {
         return Result::ErrorInitVideoCore;
     }
     AudioCore::Init();
+	CheatCore::Init();
     InputCore::Init();
     GDBStub::Init();
 
@@ -43,6 +46,7 @@ bool IsPoweredOn() {
 
 void Shutdown() {
     GDBStub::Shutdown();
+	CheatCore::Shutdown();
     InputCore::Shutdown();
     AudioCore::Shutdown();
     VideoCore::Shutdown();

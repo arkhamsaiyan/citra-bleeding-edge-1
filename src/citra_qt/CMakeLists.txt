@@ -19,6 +19,7 @@ set(SRCS
             util/spinbox.cpp
             util/util.cpp
             bootmanager.cpp
+            cheat_gui.cpp
             configure_audio.cpp
             configure_debug.cpp
             configure_dialog.cpp
@@ -55,6 +56,7 @@ set(HEADERS
             util/spinbox.h
             util/util.h
             bootmanager.h
+            cheat_gui.h
             configure_audio.h
             configure_debug.h
             configure_dialog.h
@@ -77,6 +79,7 @@ set(UIS
             debugger/disassembler.ui
             debugger/profiler.ui
             debugger/registers.ui
+            cheat_gui.ui
             configure.ui
             configure_audio.ui
             configure_debug.ui
