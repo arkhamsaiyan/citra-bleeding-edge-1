@@ -405,16 +405,15 @@ void RendererOpenGL::DrawScreens() {
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(uniform_color_texture, 0);
 
-    if (layout.top_screen_enabled) {
-        DrawSingleScreenRotated(screen_infos[0], (float)top_screen.left,
-                                (float)top_screen.top, (float)top_screen.GetWidth(),
-                                (float)top_screen.GetHeight());
-    }
-    if (layout.bottom_screen_enabled) {
-        DrawSingleScreenRotated(screen_infos[1], (float)bottom_screen.left,
-                                (float)bottom_screen.top, (float)bottom_screen.GetWidth(),
-                                (float)bottom_screen.GetHeight());
-    }
+	if (layout.top_screen_enabled) {
+		DrawSingleScreenRotated(screen_infos[0], (float)top_screen.left, (float)top_screen.top,
+			(float)top_screen.GetWidth(), (float)top_screen.GetHeight());
+		
+	}
+	if (layout.bottom_screen_enabled) {
+		DrawSingleScreenRotated(screen_infos[1], (float)bottom_screen.left, (float)bottom_screen.top,
+			(float)bottom_screen.GetWidth(), (float)bottom_screen.GetHeight());
+	}
 
     m_current_frame++;
 }
@@ -486,25 +485,25 @@ static void APIENTRY DebugHandler(GLenum source, GLenum type, GLuint id, GLenum 
 
 /// Initialize the renderer
 bool RendererOpenGL::Init() {
-    render_window->MakeCurrent();
+	render_window->MakeCurrent();
 
-    if (GLAD_GL_KHR_debug) {
-        glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(DebugHandler, nullptr);
-    }
+	if (GLAD_GL_KHR_debug) {
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback(DebugHandler, nullptr);
+	}
 
-    LOG_INFO(Render_OpenGL, "GL_VERSION: %s", glGetString(GL_VERSION));
-    LOG_INFO(Render_OpenGL, "GL_VENDOR: %s", glGetString(GL_VENDOR));
-    LOG_INFO(Render_OpenGL, "GL_RENDERER: %s", glGetString(GL_RENDERER));
-    if (!GLAD_GL_VERSION_3_3) {
-        return false;
-    }
+	LOG_INFO(Render_OpenGL, "GL_VERSION: %s", glGetString(GL_VERSION));
+	LOG_INFO(Render_OpenGL, "GL_VENDOR: %s", glGetString(GL_VENDOR));
+	LOG_INFO(Render_OpenGL, "GL_RENDERER: %s", glGetString(GL_RENDERER));
+	if (!GLAD_GL_VERSION_3_3) {
+		return false;
+	}
 
-    InitOpenGLObjects();
+	InitOpenGLObjects();
 
-    RefreshRasterizerSetting();
+	RefreshRasterizerSetting();
 
-    return true;
+	return true;
 }
 
 /// Shutdown the renderer
