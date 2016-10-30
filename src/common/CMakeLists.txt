@@ -35,7 +35,7 @@ set(HEADERS
             common_types.h
             emu_window.h
             file_util.h
-            framebuffer_layout.h
+            framebuffer_layout.cpp
             hash.h
             linear_disk_cache.h
             logging/text_formatter.h

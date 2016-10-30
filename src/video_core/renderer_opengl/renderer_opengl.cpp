@@ -390,8 +390,8 @@ void RendererOpenGL::DrawSingleScreenRotated(const ScreenInfo& screen_info, floa
  */
 void RendererOpenGL::DrawScreens() {
     auto layout = render_window->GetFramebufferLayout();
-    const auto& top_screen = layout.top_screen;
-    const auto& bottom_screen = layout.bottom_screen;
+	auto top_screen = layout.top_screen;
+	auto bottom_screen = layout.bottom_screen;
 
     glViewport(0, 0, layout.width, layout.height);
     glClear(GL_COLOR_BUFFER_BIT);

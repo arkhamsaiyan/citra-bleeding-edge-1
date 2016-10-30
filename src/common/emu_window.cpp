@@ -17,7 +17,7 @@
  * @param framebuffer_y Framebuffer y-coordinate to check
  * @return True if the coordinates are within the touchpad, otherwise false
  */
-static bool IsWithinTouchscreen(const Layout::FramebufferLayout& layout, unsigned framebuffer_x,
+static bool IsWithinTouchscreen(const FramebufferLayout& layout, unsigned framebuffer_x,
                                 unsigned framebuffer_y) {
     return (
         framebuffer_y >= layout.bottom_screen.top && framebuffer_y < layout.bottom_screen.bottom &&
@@ -70,18 +70,20 @@ void EmuWindow::TouchMoved(unsigned framebuffer_x, unsigned framebuffer_y) {
 }
 
 void EmuWindow::UpdateCurrentFramebufferLayout(unsigned width, unsigned height) {
-    Layout::FramebufferLayout layout;
-    switch (Settings::values.layout_option) {
-    case Settings::LayoutOption::SingleScreen:
-        layout = Layout::SingleFrameLayout(width, height, Settings::values.swap_screen);
-        break;
-    case Settings::LayoutOption::LargeScreen:
-        layout = Layout::LargeFrameLayout(width, height, Settings::values.swap_screen);
-        break;
-    case Settings::LayoutOption::Default:
-    default:
-        layout = Layout::DefaultFrameLayout(width, height, Settings::values.swap_screen);
-        break;
-    }
-    NotifyFramebufferLayoutChanged(layout);
+	FramebufferLayout layout;
+	switch (Settings::values.layout_option) {
+	case Settings::LayoutOption::SingleScreen:
+		layout = FramebufferLayout::SingleFrameLayout(width, height);
+		break;
+	case Settings::LayoutOption::LargeScreen:
+		layout = FramebufferLayout::LargeFrameLayout(width, height);
+		break;
+	case Settings::LayoutOption::Default:
+	default:
+		layout = FramebufferLayout::DefaultFrameLayout(width, height);
+		break;
+	}
+    // Reverse the screens if the setting has changed
+	layout.ReverseFrames(Settings::values.swap_screen);
+	NotifyFramebufferLayoutChanged(layout);
 }

@@ -139,7 +139,7 @@ public:
       * Gets the framebuffer layout (width, height, and screen regions)
       * @note This method is thread-safe
       */
-    const Layout::FramebufferLayout& GetFramebufferLayout() const {
+	const FramebufferLayout& GetFramebufferLayout() const {
         return framebuffer_layout;
     }
 
@@ -147,7 +147,7 @@ public:
      * Convenience method to update the VideoCore EmuWindow
      * Read from the current settings to determine which layout to use.
      */
-    void UpdateCurrentFramebufferLayout(unsigned width, unsigned height);
+	void UpdateCurrentFramebufferLayout(unsigned width, unsigned height);
 
 protected:
     EmuWindow() {
@@ -178,7 +178,7 @@ protected:
      * Update framebuffer layout with the given parameter.
      * @note EmuWindow implementations will usually use this in window resize event handlers.
      */
-    void NotifyFramebufferLayoutChanged(const Layout::FramebufferLayout& layout) {
+	void NotifyFramebufferLayoutChanged(const FramebufferLayout& layout) {
         framebuffer_layout = layout;
     }
 
@@ -202,7 +202,7 @@ private:
         // By default, ignore this request and do nothing.
     }
 
-    Layout::FramebufferLayout framebuffer_layout; ///< Current framebuffer layout
+	FramebufferLayout framebuffer_layout; ///< Current framebuffer layout
 
     unsigned client_area_width;  ///< Current client width, should be set by window impl.
     unsigned client_area_height; ///< Current client height, should be set by window impl.
