@@ -30,6 +30,7 @@
 #include "citra_qt/game_list.h"
 #include "citra_qt/hotkeys.h"
 #include "citra_qt/main.h"
+#include "citra_qt/stereoscopic_controller.h"
 #include "citra_qt/ui_settings.h"
 #include "common/logging/backend.h"
 #include "common/logging/filter.h"
@@ -61,6 +62,10 @@ GMainWindow::GMainWindow() : config(new Config()), emu_thread(nullptr) {
     game_list = new GameList();
     ui.horizontalLayout->addWidget(game_list);
 
+	stereoscopicControllerWidget = new StereoscopicControllerWidget(this);
+	addDockWidget(Qt::LeftDockWidgetArea, stereoscopicControllerWidget);
+	stereoscopicControllerWidget->setFloating(true);
+	
     profilerWidget = new ProfilerWidget(this);
     addDockWidget(Qt::BottomDockWidgetArea, profilerWidget);
     profilerWidget->hide();
@@ -110,6 +115,9 @@ GMainWindow::GMainWindow() : config(new Config()), emu_thread(nullptr) {
     addDockWidget(Qt::LeftDockWidgetArea, waitTreeWidget);
     waitTreeWidget->hide();
 
+	ui.menu_Emulation->addSeparator();
+	ui.menu_Emulation->addAction(stereoscopicControllerWidget->toggleViewAction());
+	
     QMenu* debug_menu = ui.menu_View->addMenu(tr("Debugging"));
     debug_menu->addAction(graphicsSurfaceViewerAction);
     debug_menu->addSeparator();
@@ -181,6 +189,16 @@ GMainWindow::GMainWindow() : config(new Config()), emu_thread(nullptr) {
     connect(ui.action_Stop, SIGNAL(triggered()), this, SLOT(OnStopGame()));
     connect(ui.action_Single_Window_Mode, SIGNAL(triggered(bool)), this, SLOT(ToggleWindowMode()));
 
+	connect(this, SIGNAL(EmulationStarting(EmuThread*)), stereoscopicControllerWidget,
+		SLOT(OnEmulationStarting(EmuThread*)));
+	connect(this, SIGNAL(EmulationStopping()), stereoscopicControllerWidget,
+		SLOT(OnEmulationStopping()));
+	connect(stereoscopicControllerWidget, SIGNAL(DepthChanged(float)), this,
+		SLOT(OnDepthChanged(float)));
+	connect(stereoscopicControllerWidget,
+		SIGNAL(StereoscopeModeChanged(EmuWindow::StereoscopicMode)), this,
+		SLOT(OnStereoscopeModeChanged(EmuWindow::StereoscopicMode)));
+
     connect(this, SIGNAL(EmulationStarting(EmuThread*)), disasmWidget,
             SLOT(OnEmulationStarting(EmuThread*)));
     connect(this, SIGNAL(EmulationStopping()), disasmWidget, SLOT(OnEmulationStopping()));
@@ -219,6 +237,15 @@ GMainWindow::GMainWindow() : config(new Config()), emu_thread(nullptr) {
     if (args.length() >= 2) {
         BootGame(args[1].toStdString());
     }
+}
+
+void GMainWindow::OnDepthChanged(float v) {
+    VideoCore::g_emu_window->DepthSliderChanged(v);
+}
+
+void GMainWindow::OnStereoscopeModeChanged(EmuWindow::StereoscopicMode mode) {
+	VideoCore::g_emu_window->StereoscopicModeChanged(mode);
+	
 }
 
 GMainWindow::~GMainWindow() {

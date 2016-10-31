@@ -84,7 +84,9 @@ void EmuThread::run() {
 class GGLWidgetInternal : public QGLWidget {
 public:
     GGLWidgetInternal(QGLFormat fmt, GRenderWindow* parent)
-        : QGLWidget(fmt, parent), parent(parent) {}
+        : QGLWidget(fmt, parent), parent(parent) {
+        this->setMouseTracking(true);
+    }
 
     void paintEvent(QPaintEvent* ev) override {
         if (do_painting) {
@@ -117,6 +119,9 @@ GRenderWindow::GRenderWindow(QWidget* parent, EmuThread* emu_thread)
     setWindowTitle(QString::fromStdString(window_title));
 
     keyboard_id = 0;
+	
+    this->setMouseTracking(true);
+    parent->setMouseTracking(true);
 
     // TODO: One of these flags might be interesting: WA_OpaquePaintEvent, WA_NoBackground,
     // WA_DontShowOnScreen, WA_DeleteOnClose

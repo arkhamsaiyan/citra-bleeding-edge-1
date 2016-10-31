@@ -33,6 +33,7 @@ set(SRCS
             hotkeys.cpp
             keybinding_names.cpp
             main.cpp
+            stereoscopic_controller.cpp
             ui_settings.cpp
             citra-qt.rc
             Info.plist
@@ -72,6 +73,7 @@ set(HEADERS
             hotkeys.h
             keybinding_names.h
             main.h
+            stereoscopic_controller.h
             ui_settings.h
             version.h
             )
