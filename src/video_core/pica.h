@@ -47,7 +47,7 @@ struct Regs {
 
     INSERT_PADDING_WORDS(0x10);
 
-    u32 trigger_irq;
+    u32 trigger_irq; // 0x10
 
     INSERT_PADDING_WORDS(0x2f);
 
@@ -60,21 +60,28 @@ struct Regs {
     };
 
     union {
-        BitField<0, 2, CullMode> cull_mode;
+        BitField<0, 2, CullMode> cull_mode; // 0x40
     };
 
-    BitField<0, 24, u32> viewport_size_x;
+    BitField<0, 24, u32> viewport_size_x; // 0x41
+    BitField<0, 24, u32> viewport_invw;   // -0x42
+    BitField<0, 24, u32> viewport_size_y; // 0x43
+    BitField<0, 24, u32> viewport_invh;   // -0x44
 
-    INSERT_PADDING_WORDS(0x1);
+    INSERT_PADDING_WORDS(0x2); // 0x46, 0x46
 
-    BitField<0, 24, u32> viewport_size_y;
+    BitField<0, 1, u32> fragop_flip;        // -0x47 enagle/disable
+    BitField<0, 24, u32> fragop_flip_data0; // -0x48
+    BitField<0, 24, u32> fragop_flip_data1; // -0x49
+    BitField<0, 24, u32> fragop_flip_data2; // -0x4A
+    BitField<0, 24, u32> fragop_flip_data3; // -0x4B
 
-    INSERT_PADDING_WORDS(0x9);
+    INSERT_PADDING_WORDS(0x1); // 0x4C
 
-    BitField<0, 24, u32> viewport_depth_range;      // float24
-    BitField<0, 24, u32> viewport_depth_near_plane; // float24
+    BitField<0, 24, u32> viewport_depth_range;      // float24  0x4D
+    BitField<0, 24, u32> viewport_depth_near_plane; // float24  0x4E
 
-    BitField<0, 3, u32> vs_output_total;
+    BitField<0, 3, u32> vs_output_total; // 0x4F
 
     union VSOutputAttributes {
         // Maps components of output vertex attributes to semantics
@@ -114,9 +121,14 @@ struct Regs {
         BitField<8, 5, Semantic> map_y;
         BitField<16, 5, Semantic> map_z;
         BitField<24, 5, Semantic> map_w;
-    } vs_output_attributes[7];
+    } vs_output_attributes[7]; // 0x50-0x56
 
-    INSERT_PADDING_WORDS(0xe);
+    INSERT_PADDING_WORDS(0xa); // 0x57-0x60
+
+    u32 earlydepth_func;                  // -0x61
+    u32 earlydepth_test1;                 // -0x62
+    BitField<0, 1, u32> earlydepth_clear; // -0x63
+    BitField<0, 1, u32> sh_outattr_mode;  // -0x64
 
     enum class ScissorMode : u32 {
         Disabled = 0,
@@ -137,25 +149,24 @@ struct Regs {
             BitField<0, 16, u32> x2;
             BitField<16, 16, u32> y2;
         };
-    } scissor_test;
+    } scissor_test; // 0x65, 0x66, 0x67
 
     union {
         BitField<0, 10, s32> x;
         BitField<16, 10, s32> y;
-    } viewport_corner;
+    } viewport_corner; // 0x68
 
-    INSERT_PADDING_WORDS(0x1);
+    INSERT_PADDING_WORDS(0x1); // -0x69
 
-    // TODO: early depth
-    INSERT_PADDING_WORDS(0x1);
+    BitField<0, 24, u32> earlydepth_data; // -0x6A
 
-    INSERT_PADDING_WORDS(0x2);
+    INSERT_PADDING_WORDS(0x2); // 0x6B, 0x6C
 
     enum DepthBuffering : u32 {
         WBuffering = 0,
         ZBuffering = 1,
     };
-    BitField<0, 1, DepthBuffering> depthmap_enable;
+    BitField<0, 1, DepthBuffering> depthmap_enable; // 0x6B
 
     INSERT_PADDING_WORDS(0x12);
 

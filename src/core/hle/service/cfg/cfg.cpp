@@ -464,7 +464,8 @@ ResultCode FormatConfig() {
         return res;
 
     // 0x000D0000 - Accepted EULA version
-    res = CreateConfigInfoBlk(EULAVersionBlockID, 0x4, 0xE, zero_buffer);
+    u32 version = 0x0000FFFF;
+    res = CreateConfigInfoBlk(EULAVersionBlockID, 0x4, 0xE, &version);
     if (!res.IsSuccess())
         return res;
 
