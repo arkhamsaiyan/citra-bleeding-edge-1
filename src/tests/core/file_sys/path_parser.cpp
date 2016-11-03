@@ -22,7 +22,6 @@ TEST_CASE("PathParser", "[core][file_sys]") {
 }
 
 TEST_CASE("PathParser - Host file system", "[core][file_sys]") {
-
     std::string test_dir = "./test";
     FileUtil::CreateDir(test_dir);
     FileUtil::CreateDir(test_dir + "/z");
