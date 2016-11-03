@@ -3,7 +3,7 @@
 // Refer to the license.txt file included.
 
 #include <time.h>
-#ifdef _WIN32
+#ifdef _WIN64
 #include <Windows.h>
 #include <mmsystem.h>
 #include <sys/timeb.h>
@@ -17,7 +17,7 @@
 namespace Common {
 
 u32 Timer::GetTimeMs() {
-#ifdef _WIN32
+#ifdef _WIN64
     return timeGetTime();
 #else
     struct timeval t;
@@ -110,13 +110,13 @@ std::string Timer::GetTimeElapsedFormatted() const {
 
 // Get current time
 void Timer::IncreaseResolution() {
-#ifdef _WIN32
+#ifdef _WIN64
     timeBeginPeriod(1);
 #endif
 }
 
 void Timer::RestoreResolution() {
-#ifdef _WIN32
+#ifdef _WIN64
     timeEndPeriod(1);
 #endif
 }
@@ -161,7 +161,7 @@ std::string Timer::GetTimeFormatted() {
     strftime(tmp, 6, "%M:%S", gmTime);
 
 // Now tack on the milliseconds
-#ifdef _WIN32
+#ifdef _WIN64
     struct timeb tp;
     (void)::ftime(&tp);
     return StringFromFormat("%s:%03i", tmp, tp.millitm);
@@ -175,7 +175,7 @@ std::string Timer::GetTimeFormatted() {
 // Returns a timestamp with decimals for precise time comparisons
 // ----------------
 double Timer::GetDoubleTime() {
-#ifdef _WIN32
+#ifdef _WIN64
     struct timeb tp;
     (void)::ftime(&tp);
 #else
@@ -193,7 +193,7 @@ double Timer::GetDoubleTime() {
 
     // Make a smaller integer that fits in the double
     u32 Seconds = (u32)TmpSeconds;
-#ifdef _WIN32
+#ifdef _WIN64
     double ms = tp.millitm / 1000.0 / 1000.0;
 #else
     double ms = t.tv_usec / 1000000.0;

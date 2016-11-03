@@ -14,7 +14,7 @@
 #include <numeric>
 #include <fcntl.h>
 
-#ifdef _WIN32
+#ifdef _WIN64
 #include <WinSock2.h>
 #include <common/x64/abi.h>
 #include <io.h>
@@ -132,7 +132,7 @@ static bool halt_loop = true;
 static bool step_loop = false;
 std::atomic<bool> g_server_enabled(false);
 
-#ifdef _WIN32
+#ifdef _WIN64
 WSADATA InitData;
 #endif
 
@@ -943,7 +943,7 @@ static void Init(u16 port) {
     saddr_server.sin_port = htons(port);
     saddr_server.sin_addr.s_addr = INADDR_ANY;
 
-#ifdef _WIN32
+#ifdef _WIN64
     WSAStartup(MAKEWORD(2, 2), &InitData);
 #endif
 
@@ -1008,7 +1008,7 @@ void Shutdown() {
         gdbserver_socket = -1;
     }
 
-#ifdef _WIN32
+#ifdef _WIN64
     WSACleanup();
 #endif
 
