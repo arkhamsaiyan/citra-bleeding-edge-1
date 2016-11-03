@@ -189,7 +189,7 @@ ELSEIF(MINGW)
     set(PLATFORM_LIBRARIES winmm ws2_32 psapi imm32 version)
 
     # WSAPoll functionality doesn't exist before WinNT 6.x (Vista and up)
-    add_definitions(-D_WIN32_WINNT=0x0600)
+    add_definitions(-D_WIN64_WINNT=0x0600)
 ELSEIF(WIN32)
     set(PLATFORM_LIBRARIES winmm ws2_32)
 ELSEIF(CMAKE_SYSTEM_NAME MATCHES "^(Linux|kFreeBSD|GNU|SunOS)$")

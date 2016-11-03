@@ -152,7 +152,7 @@ std::string GetSysDirectory();
 std::string GetBundleDirectory();
 #endif
 
-#ifdef _WIN32
+#ifdef _WIN64
 std::string& GetExeDirectory();
 #endif
 
