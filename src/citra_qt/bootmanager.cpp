@@ -230,6 +230,7 @@ qreal GRenderWindow::windowPixelRatio() {
 }
 
 void GRenderWindow::closeEvent(QCloseEvent* event) {
+    motion_emu = nullptr;
     emit Closed();
     QWidget::closeEvent(event);
 }
@@ -249,11 +250,13 @@ void GRenderWindow::keyReleaseEvent(QKeyEvent* event) {
 }
 
 void GRenderWindow::mousePressEvent(QMouseEvent* event) {
+    auto pos = event->pos();
     if (event->button() == Qt::LeftButton) {
-        auto pos = event->pos();
         qreal pixelRatio = windowPixelRatio();
         this->TouchPressed(static_cast<unsigned>(pos.x() * pixelRatio),
                            static_cast<unsigned>(pos.y() * pixelRatio));
+    } else if (event->button() == Qt::RightButton) {
+        motion_emu->BeginTilt(pos.x(), pos.y());
     }
 }
 
@@ -262,11 +265,14 @@ void GRenderWindow::mouseMoveEvent(QMouseEvent* event) {
     qreal pixelRatio = windowPixelRatio();
     this->TouchMoved(std::max(static_cast<unsigned>(pos.x() * pixelRatio), 0u),
                      std::max(static_cast<unsigned>(pos.y() * pixelRatio), 0u));
+    motion_emu->Tilt(pos.x(), pos.y());
 }
 
 void GRenderWindow::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton)
         this->TouchReleased();
+    else if (event->button() == Qt::RightButton)
+        motion_emu->EndTilt();
 }
 
 void GRenderWindow::OnClientAreaResized(unsigned width, unsigned height) {
@@ -315,11 +321,13 @@ void GRenderWindow::OnMinimalClientAreaChangeRequest(
 }
 
 void GRenderWindow::OnEmulationStarting(EmuThread* emu_thread) {
+    motion_emu = std::make_unique<Motion::MotionEmu>(*this);
     this->emu_thread = emu_thread;
     child->DisablePainting();
 }
 
 void GRenderWindow::OnEmulationStopping() {
+    motion_emu = nullptr;
     emu_thread = nullptr;
     child->EnablePainting();
 }

@@ -79,6 +79,27 @@ public:
      */
     void TouchMoved(unsigned framebuffer_x, unsigned framebuffer_y);
 
+	/**
+     * Signal accelerometer state has changed.
+     * @param x X-axis accelerometer value
+     * @param y Y-axis accelerometer value
+     * @param z Z-axis accelerometer value
+     * @note all values are in unit of g (gravitational acceleration).
+     *    e.g. x = 1.0 means 9.8m/s^2 in x direction.
+     * @see GetAccelerometerState for axis explanation.
+     */
+	void AccelerometerChanged(float x, float y, float z);
+	
+    /**
+     * Signal gyroscope state has changed.
+     * @param x X-axis accelerometer value
+     * @param y Y-axis accelerometer value
+     * @param z Z-axis accelerometer value
+     * @note all values are in deg/sec.
+     * @see GetGyroscopeState for axis explanation.
+     */
+		void GyroscopeChanged(float x, float y, float z);
+
     /**
      * Signal accelerometer state has changed.
      * @param x X-axis accelerometer value
@@ -88,7 +109,6 @@ public:
      *    e.g. x = 1.0 means 9.8m/s^2 in x direction.
      * @see GetAccelerometerState for axis explanation.
      */
-    void AccelerometerChanged(float x, float y, float z);
 
     /**
      * Signal gyroscope state has changed.
@@ -98,7 +118,6 @@ public:
      * @note all values are in deg/sec.
      * @see GetGyroscopeState for axis explanation.
      */
-    void GyroscopeChanged(float x, float y, float z);
 
     /**
      * Signal that a 3d depth slider change has occurred
