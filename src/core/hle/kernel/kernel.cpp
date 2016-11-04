@@ -6,6 +6,7 @@
 #include "common/assert.h"
 #include "common/logging/log.h"
 #include "core/hle/config_mem.h"
+#include "core/hle/kernel/event.h"
 #include "core/hle/kernel/kernel.h"
 #include "core/hle/kernel/memory.h"
 #include "core/hle/kernel/process.h"
@@ -37,7 +38,7 @@ void WaitObject::WakeupAllWaitingThreads() {
 
     waiting_threads.clear();
 
-    HLE::Reschedule(__func__);
+    // HLE::Reschedule(__func__);
 }
 
 const std::vector<SharedPtr<Thread>>& WaitObject::GetWaitingThreads() const {
@@ -135,6 +136,7 @@ void Init() {
     Kernel::ResourceLimitsInit();
     Kernel::ThreadingInit();
     Kernel::TimersInit();
+	Kernel::EventsInit();
 
     Object::next_object_id = 0;
     // TODO(Subv): Start the process ids from 10 for now, as lower PIDs are
@@ -149,6 +151,7 @@ void Shutdown() {
     Kernel::ThreadingShutdown();
     g_current_process = nullptr;
 
+	Kernel::EventsShutdown();
     Kernel::TimersShutdown();
     Kernel::ResourceLimitsShutdown();
     Kernel::MemoryShutdown();

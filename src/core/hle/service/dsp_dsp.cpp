@@ -240,6 +240,8 @@ static void RegisterInterruptEvents(Service::Interface* self) {
                      type_index, pipe_index, event_handle);
             ASSERT(false); // TODO: This should really be handled at an IPC translation layer.
         }
+		
+        evt->name = "DSP_Event";
 
         if (interrupt_events.HasTooManyEventsRegistered()) {
             LOG_INFO(Service_DSP, "Ran out of space to register interrupts (Attempted to register "

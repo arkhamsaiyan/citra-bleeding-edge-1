@@ -226,6 +226,8 @@ static ResultCode ConnectToPort(Handle* out_handle, const char* port_name) {
     return RESULT_SUCCESS;
 }
 
+static void SleepThread(s64 nanoseconds);
+
 /// Synchronize to an OS service
 static ResultCode SendSyncRequest(Handle handle) {
     SharedPtr<Kernel::Session> session = Kernel::g_handle_table.Get<Kernel::Session>(handle);
@@ -235,7 +237,9 @@ static ResultCode SendSyncRequest(Handle handle) {
 
     LOG_TRACE(Kernel_SVC, "called handle=0x%08X(%s)", handle, session->GetName().c_str());
 
-    return session->SyncRequest().Code();
+    auto ret = session->SyncRequest().Code();
+    // SleepThread(0);
+    return ret;
 }
 
 /// Close a handle
@@ -294,6 +298,14 @@ static ResultCode WaitSynchronizationN(s32* out, Handle* handles, s32 handle_cou
     // NOTE: on real hardware, there is no nullptr check for 'out' (tested with firmware 4.4). If
     // this happens, the running application will crash.
     ASSERT_MSG(out != nullptr, "invalid output pointer specified!");
+	
+    std::ostringstream hndl_names;
+    for (s32 i = 0; i < handle_count; ++i) {
+        auto obj = Kernel::g_handle_table.GetWaitObject(handles[i]);
+        hndl_names << "0x" << std::hex << obj->GetObjectId() << ":" << obj->GetName() << ", ";
+    }
+    // LOG_ERROR(Kernel_SVC, "called thrd_id=%d, handles=%s nanoseconds=%lld",
+    // Kernel::GetCurrentThread()->GetObjectId(), hndl_names.str().c_str(), nano_seconds);
 
     // Check if 'handle_count' is invalid
     if (handle_count < 0)
@@ -497,7 +509,8 @@ static ResultCode CreateThread(Handle* out_handle, s32 priority, u32 entry_point
         TSymbol symbol = Symbols::GetSymbol(entry_point);
         name = symbol.name;
     } else {
-        name = Common::StringFromFormat("unknown-%08x", entry_point);
+        // name = Common::StringFromFormat("unknown-%08x", entry_point);
+        name = Common::StringFromFormat("thread-%08x", Memory::Read32(arg + 8));
     }
 
     // TODO(bunnei): Implement resource limits to return an error code instead of the below assert.
